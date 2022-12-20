@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Consolidated Screening List Search</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Consolidated Screening List Search</h1>
+  <form>
+    <input type="text" id="name" name="name" placeholder="Search by name"><br>
+    <input type="submit" value="Search">
+  </form> 
+  <button id="prev-btn" style="display: none;">Prev</button>
+  <button id="next-btn" style="display: none;">Next</button>
+  <div id="results"></div>
+  
+  
+  <script>
+    let offset = 0;
+    
+    const form = document.querySelector('form');
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const name = document.querySelector('#name').value;
+      if (!name) {
+        return;
+      }
+      fetchResults(name, offset);
+    });
+    
+    const prevBtn = document.querySelector('#prev-btn');
+    prevBtn.addEventListener('click', (event) => {
+      offset -= 10;
+      const name = document.querySelector('#name').value;
+      fetchResults(name, offset);
+    });
+    
+    const nextBtn = document.querySelector('#next-btn');
+    nextBtn.addEventListener('click', (event) => {
+      offset += 10;
+      const name = document.querySelector('#name').value;
+      fetchResults(name, offset);
+    });
+    
+    function fetchResults(name, offset) {
+      fetch(`https://data.trade.gov/consolidated_screening_list/v1/search?name=${name}&fuzzy_name=true&offset=${offset}`, {
+        method: 'GET',
+        headers: {
+          'Cache-Control': 'no-cache',
+          'subscription-key': 'b9730532d6ba42fabc7e93f2b1c1df60',
+        },
+      })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        const resultsDiv = document.querySelector('#results');
+        resultsDiv.innerHTML = '';
+        if (data.total === 0) {
+          resultsDiv.innerHTML = '<p>No results found</p>';
+          prevBtn.style.display = 'none';
+          nextBtn.style.display = 'none';
+          return;
+        }
+        prevBtn.style.display = 'inline-block';
+        nextBtn.style.display = 'inline-block';
+        const table = document.createElement('table');
+        const headingsRow = document.createElement('tr');
+        headingsRow.innerHTML = `
+    <th>ID</th>
+    <th>Name</th>
+    <th>Citizenships</th>
+    <th>Type</th>
+    <th>List</th>
+  `;
+        table.appendChild(headingsRow);
+        data.results.forEach((result) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+      <td>${result.id}</td>
+      <td>${result.name}</td>
+      <td>${result.citizenships}</td>
+      <td>${result.type}</td>
+      <td><a href="${result.source_information_url}" target="_blank">${result.source.split('(')[1].split(')')[0]}</a></td>
+    `;
+          table.appendChild(row);
+        });
+        resultsDiv.appendChild(table);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    };      
+  </script>
+</body>
+</html>
