@@ -170,7 +170,7 @@
             ${result.vessel_flag ? `<strong>Vessel Flag:</strong> ${result.vessel_flag}<br>` : ''}
             ${result.vessel_owner ? `<strong>Vessel Owner:</strong> ${result.vessel_owner}<br>` : ''}
             ${result.vessel_type ? `<strong>Vessel Type:</strong> ${result.vessel_type}<br>` : ''}
-            ${result.addresses.length ? `<strong>Addresses:</strong> <ul>${result.addresses.map(address => `<li>${address.address}<br>${address.city}, ${address.state} ${address.postal_code}<br>${address.country}</li>`).join('')}</ul>` : ''}
+            ${result.addresses.length && result.addresses[0] !== null ? `<strong>Addresses:</strong> <ul>${result.addresses.map(address => `<li>${address.address !== null ? `${address.address}<br>` : ''}${address.city !== null ? `${address.city} ` : ''}${address.state !== null ? `, ${address.state} ` : ''}${address.postal_code !== null ? ` ${address.postal_code}` : ''}${address.country !== null ? `${address.country} ` : ''}</li>`).join('')}</ul>` : ''}
             ${result.ids.length ? `<strong>Identification:</strong> <ul>${result.ids.map(id => `<li>${id.type}: ${id.number}<br>${id.issue_date ? `Issue Date: ${id.issue_date}` : ''} ${id.expiration_date ? `Expiration Date: ${id.expiration_date}` : ''} ${id.country ? `Country: ${id.country}` : ''}</li>`).join('')}</ul>` : ''}
         `;
           
