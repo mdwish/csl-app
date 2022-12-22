@@ -2,10 +2,10 @@
 <html>
 <head>
   
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="manifest" href="/site.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
   <title>Free Denied Party Screening Search</title>
@@ -28,6 +28,7 @@
 
 </head>
 <body>
+  
   <div class="container">
     <h1 class="display-4 mt-5">Free Denied Party Screening Search</h1>
     <p class="lead mb-5">Our denied party screening tool helps you identify restricted parties and verify compliance with export control regulations. Simply enter the party's name or identifying information, and our tool will search various updated denied parties lists to determine if they are listed as restricted. It is important to regularly screen trade partners for compliance, and our tool makes it easy and convenient to do so.</p>
@@ -37,13 +38,15 @@
         <button type="submit" class="btn btn-success">Search</button>
       </div>
     </form>
+    <p id="total-results"></p>
     <div id="results"></div>
     <button id="prev-btn" class="btn btn-secondary" style="display: none;">Prev</button>
     <button id="next-btn" class="btn btn-secondary" style="display: none;">Next</button>
   </div>
-
+  
   <script>
     let offset = 0;
+    let total = 0;
     
     const form = document.querySelector('form');
     form.addEventListener('submit', (event) => {
@@ -85,6 +88,8 @@
         return response.json();
       })
       .then((data) => {
+        total = data.total;
+        document.querySelector('#total-results').innerHTML = `${total} Results`;
         const resultsDiv = document.querySelector('#results');
         resultsDiv.innerHTML = '';
         if (data.total === 0) {
@@ -95,36 +100,99 @@
         }
         prevBtn.style.display = 'inline-block';
         nextBtn.style.display = 'inline-block';
-        const table = document.createElement('table');
-        table.classList.add('table', 'table-bordered', 'table-striped', 'table-hover');
-        const headingsRow = document.createElement('tr');
-        headingsRow.innerHTML = `
-    <th>Name</th>
-    <th>Type</th>
-    <th>List</th>
-  `;
-        const thead = document.createElement('thead');
-        thead.appendChild(headingsRow);
-        table.appendChild(thead);
-        const tbody = document.createElement('tbody');
-        data.results.forEach((result) => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-      <td>${result.name === null ? "" : result.name}<br><small class="text-muted">ID: ${result.id === null ? "" : result.id}</small></td>
-      <td>${result.type === null ? "" : result.type}</td>
-      <td><a href="${result.source_information_url}" target="_blank">${result.source.split('(')[1].split(')')[0]}</a></td>
-    `;
-          tbody.appendChild(row);
-        });
-        table.appendChild(tbody);
-        resultsDiv.appendChild(table);
+        
+        // Create the accordion element
+        const accordion = document.createElement('div');
+        accordion.classList.add('accordion');
+        accordion.setAttribute('id', 'accordionExample');
+        
+        // Iterate through the results and create an accordion for each result
+        data.results.forEach((result, index) => {
+          const accordionItem = document.createElement('div');
+          accordionItem.classList.add('accordion-item');
+          
+          // Create the accordion heading
+          const accordionHeading = document.createElement('h2');
+          accordionHeading.classList.add('accordion-header');
+          accordionHeading.setAttribute('id', `heading${index}`);
+          
+          // Create the accordion button
+          const accordionButton = document.createElement('button');
+          accordionButton.classList.add('accordion-button');
+          accordionButton.classList.add('collapsed');
+          accordionButton.setAttribute('type', 'button');
+          accordionButton.setAttribute('data-bs-toggle', 'collapse');
+          accordionButton.setAttribute('data-bs-target', `#collapse${index}`);
+          accordionButton.setAttribute('aria-expanded', 'false');
+          accordionButton.setAttribute('aria-controls', `collapse${index}`);
+          accordionButton.innerHTML = `${result.type === null ? '&#10067;' : ''} ${result.type === 'Individual' ? '&#128100;' : ''} ${result.type === 'Entity' ? '&#127970;' : ''} ${result.type === 'Aircraft' ? '&#9992;' : ''} ${result.type === 'Vessel' ? '&#128674;' : ''} ${result.name}`;
+          
+          
+          // Append the accordion button to the heading
+          accordionHeading.appendChild(accordionButton);
+          
+          // Create the accordion body
+          const accordionBody = document.createElement('div');
+          accordionBody.classList.add('accordion-collapse', 'collapse');
+          accordionBody.setAttribute('id', `collapse${index}`);
+          accordionBody.setAttribute('aria-labelledby', `heading${index}`);
+          accordionBody.setAttribute('data-bs-parent', '#accordionExample');
 
-      }).catch((error) => {
-        console.error(error);
+          // Create the accordion body content
+          const accordionBodyContent = document.createElement('div');
+          accordionBodyContent.classList.add('accordion-body');
+          accordionBodyContent.innerHTML = `
+          <strong>ID:</strong> ${result.id}<br>
+          ${result.type ? `<strong>Type:</strong> ${result.type === 'Individual' ? '&#128100;' : ''} ${result.type === 'Entity' ? '&#127970;' : ''} ${result.type === 'Aircraft' ? '&#9992;' : ''} ${result.type === 'Vessel' ? '&#128674;' : ''} ${result.type}<br>` : ''}
+          <strong>Name:</strong> ${result.name}<br>
+            ${result.alt_names.length ? `<strong>Alt Names:</strong> ${result.alt_names.join(', ')}<br>` : ''}
+            ${result.call_sign ? `<strong>Call Sign:</strong> ${result.call_sign}<br>` : ''}
+            ${result.citizenships.length ? `<strong>Citizenships:</strong> ${result.citizenships.join(', ')}<br>` : ''}
+            ${result.country ? `<strong>Country:</strong> ${result.country}<br>` : ''}
+            ${result.dates_of_birth.length ? `<strong>Dates of Birth:</strong> ${result.dates_of_birth.join(', ')}<br>` : ''}
+            ${result.end_date ? `<strong>End Date:</strong> ${result.end_date}<br>` : ''}
+            <strong>Entity Number:</strong> ${result.entity_number}<br>
+            ${result.federal_register_notice ? `<strong>Federal Register Notice:</strong> ${result.federal_register_notice}<br>` : ''}
+            ${result.gross_registered_tonnage ? `<strong>Gross Registered Tonnage:</strong> ${result.gross_registered_tonnage}<br>` : ''}
+            ${result.gross_tonnage ? `<strong>Gross Tonnage:</strong> ${result.gross_tonnage}<br>` : ''}
+            ${result.license_policy ? `<strong>License Policy:</strong> ${result.license_policy}<br>` : ''}
+            ${result.license_requirement ? `<strong>License Requirement:</strong> ${result.license_requirement}<br>` : ''}
+            ${result.nationalities.length ? `<strong>Nationalities:</strong> ${result.nationalities.join(', ')}<br>` : ''}
+            ${result.places_of_birth.length ? `<strong>Places of Birth:</strong> ${result.places_of_birth.join(', ')}<br>` : ''}
+            ${result.programs.length ? `<strong>Programs:</strong> ${result.programs.join(', ')}<br>` : ''}
+            ${result.remarks ? `<strong>Remarks:</strong> ${result.remarks}<br>` : ''}
+            <strong>Source:</strong> ${result.source}<br>
+              ${result.source_information_url ? `<strong>Source Information URL:</strong> <a href="${result.source_information_url}" target="_blank">${result.source_information_url}</a><br>` : ''}
+            ${result.source_list_url ? `<strong>Source List URL:</strong> <a href="${result.source_list_url}" target="_blank">${result.source_list_url}</a><br>` : ''}
+            ${result.standard_order ? `<strong>Standard Order:</strong> ${result.standard_order}<br>` : ''}
+            ${result.start_date ? `<strong>Start Date:</strong> ${result.start_date}<br>` : ''}
+            ${result.title ? `<strong>Title:</strong> ${result.title}<br>` : ''}
+            ${result.vessel_flag ? `<strong>Vessel Flag:</strong> ${result.vessel_flag}<br>` : ''}
+            ${result.vessel_owner ? `<strong>Vessel Owner:</strong> ${result.vessel_owner}<br>` : ''}
+            ${result.vessel_type ? `<strong>Vessel Type:</strong> ${result.vessel_type}<br>` : ''}
+            ${result.addresses.length ? `<strong>Addresses:</strong> <ul>${result.addresses.map(address => `<li>${address.address}<br>${address.city}, ${address.state} ${address.postal_code}<br>${address.country}</li>`).join('')}</ul>` : ''}
+            ${result.ids.length ? `<strong>Identification:</strong> <ul>${result.ids.map(id => `<li>${id.type}: ${id.number}<br>${id.issue_date ? `Issue Date: ${id.issue_date}` : ''} ${id.expiration_date ? `Expiration Date: ${id.expiration_date}` : ''} ${id.country ? `Country: ${id.country}` : ''}</li>`).join('')}</ul>` : ''}
+        `;
+          
+          // Append the accordion body content to the body
+          accordionBody.appendChild(accordionBodyContent);
+          
+          // Append the heading and body to the accordion item
+          accordionItem.appendChild(accordionHeading);
+          accordionItem.appendChild(accordionBody);
+          
+          // Append the accordion item to the accordion
+          accordion.appendChild(accordionItem);
+        });
+        
+        // Append the accordion element to the results div
+        resultsDiv.appendChild(accordion);
+
       });
-    };      
-  </script>
-  
+    };
+</script>
+
+
   <!-- JavaScript Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 </body>
@@ -153,3 +221,4 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9991637348924327"
     crossorigin="anonymous"></script>
 </html>
+            
