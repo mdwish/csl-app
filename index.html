@@ -170,9 +170,6 @@
             ${result.places_of_birth.length ? `<strong>Places of Birth:</strong> ${result.places_of_birth.join(', ')}<br>` : ''}
             ${result.programs.length ? `<strong>Programs:</strong> ${result.programs.join(', ')}<br>` : ''}
             ${result.remarks ? `<strong>Remarks:</strong> ${result.remarks}<br>` : ''}
-            <strong>Source:</strong> ${result.source}<br>
-              ${result.source_information_url ? `<strong>Source Information URL:</strong> <a href="${result.source_information_url}" target="_blank">${result.source_information_url}</a><br>` : ''}
-            ${result.source_list_url ? `<strong>Source List URL:</strong> <a href="${result.source_list_url}" target="_blank">${result.source_list_url}</a><br>` : ''}
             ${result.standard_order ? `<strong>Standard Order:</strong> ${result.standard_order}<br>` : ''}
             ${result.start_date ? `<strong>Start Date:</strong> ${result.start_date}<br>` : ''}
             ${result.title ? `<strong>Title:</strong> ${result.title}<br>` : ''}
@@ -181,6 +178,9 @@
             ${result.vessel_type ? `<strong>Vessel Type:</strong> ${result.vessel_type}<br>` : ''}
             ${result.addresses.length && result.addresses[0] !== null ? `<strong>Addresses:</strong> <ul>${result.addresses.map(address => `<li>${address.address !== null ? `${address.address}<br>` : ''}${address.city !== null ? `${address.city} ` : ''}${address.state !== null ? `, ${address.state} ` : ''}${address.postal_code !== null ? ` ${address.postal_code}` : ''}${address.country !== null ? `${address.country} ` : ''}</li>`).join('')}</ul>` : ''}
             ${result.ids.length ? `<strong>Identification:</strong> <ul>${result.ids.map(id => `<li>${id.type}: ${id.number}<br>${id.issue_date ? `Issue Date: ${id.issue_date}` : ''} ${id.expiration_date ? `Expiration Date: ${id.expiration_date}` : ''} ${id.country ? `Country: ${id.country}` : ''}</li>`).join('')}</ul>` : ''}
+            <strong>Source:</strong> ${result.source}<br>
+            ${result.source_information_url ? `<strong>Source Information URL:</strong> <a href="${result.source_information_url}" target="_blank">${result.source_information_url}</a><br>` : ''}
+            ${result.source_list_url ? `<strong>Source List URL:</strong> <a href="${result.source_list_url}" target="_blank">${result.source_list_url}</a><br>` : ''}
         `;
           
           // Append the accordion body content to the body
