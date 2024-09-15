@@ -13,8 +13,8 @@
   <meta name="keywords" content="denied party screening, restricted party screening, denied parties list">
 
   <!-- CSS only -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  
 </head>
 <body>
   
@@ -46,7 +46,112 @@
         <input type="text" class="form-control" id="name" name="name" placeholder="Search by name">
         <button type="submit" class="btn btn-success">Search</button>
       </div>
+  
+      <!-- Button to toggle filters -->
+      <button class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#filterOptions" aria-expanded="false" aria-controls="filterOptions">
+        Filters
+      </button>
+      
+      <!-- Collapsible section for switches -->
+      <div class="collapse mt-3" id="filterOptions">
+        <div class="card card-body">
+          <p class="text-muted">Note: If no filters are selected, the search will include all lists.</p>
+          
+          <!-- Row for responsive columns -->
+          <div class="row">
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="dpl" name="list" value="DPL">
+                <label class="form-check-label" for="dpl">Denied Persons List (DPL)</label>
+              </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="el" name="list" value="EL">
+                <label class="form-check-label" for="el">Entity List (EL)</label>
+              </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="meu" name="list" value="MEU">
+                <label class="form-check-label" for="meu">Military End User (MEU)</label>
+              </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="uvl" name="list" value="UVL">
+                <label class="form-check-label" for="uvl">Unverified List (UVL)</label>
+              </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="isn" name="list" value="ISN">
+                <label class="form-check-label" for="isn">Nonproliferation Sanctions (ISN)</label>
+              </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="dtc" name="list" value="DTC">
+                <label class="form-check-label" for="dtc">ITAR Debarred (DTC)</label>
+              </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="cap" name="list" value="CAP">
+                <label class="form-check-label" for="cap">CAPTA List (CAP)</label>
+              </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="cmic" name="list" value="CMIC">
+                <label class="form-check-label" for="cmic">Chinese Military-Industrial (CMIC)</label>
+              </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="fse" name="list" value="FSE">
+                <label class="form-check-label" for="fse">Foreign Sanctions Evaders (FSE)</label>
+              </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="mbs" name="list" value="MBS">
+                <label class="form-check-label" for="mbs">Non-SDN Menu-Based (MBS)</label>
+              </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="plc" name="list" value="PLC">
+                <label class="form-check-label" for="plc">Palestinian Legislative Council (PLC)</label>
+              </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="ssi" name="list" value="SSI">
+                <label class="form-check-label" for="ssi">Sectoral Sanctions (SSI)</label>
+              </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="sdn" name="list" value="SDN">
+                <label class="form-check-label" for="sdn">Specially Designated Nationals (SDN)</label>
+              </div>
+            </div>
+            <!-- Small Toggle Filters Button -->
+            <hr class="mt-3 mb-3"/>
+            <div class="col-12 col-md-6 col-lg-4">
+              <button class="btn-close" aria-label="Close" type="button" data-bs-toggle="collapse" data-bs-target="#filterOptions" aria-expanded="false" aria-controls="filterOptions"></button>
+              <!-- Clear Filters Button -->
+              <button class="btn btn-light btn-sm" type="button" id="clearFilters">
+                Clear Filters
+              </button>
+          </div>
+          </div>
+        </div>
+      </div>      
     </form>
+    
+    
     <p id="total-results"></p>
     <div id="results"></div>
     <button id="prev-btn" class="btn btn-secondary" style="display: none;">Prev</button>
@@ -83,7 +188,13 @@
     });
     
     function fetchResults(name, offset) {
-      fetch(`https://data.trade.gov/consolidated_screening_list/v1/search?name=${name}&fuzzy_name=true&offset=${offset}`, {
+      const selectedLists = Array.from(document.querySelectorAll('input[name="list"]:checked'))
+        .map(checkbox => checkbox.value)
+        .join(',');
+
+      const url = `https://data.trade.gov/consolidated_screening_list/v1/search?name=${name}&fuzzy_name=true&offset=${offset}&sources=${selectedLists}`;
+      
+      fetch(url, {
         method: 'GET',
         headers: {
           'Cache-Control': 'no-cache',
@@ -199,6 +310,12 @@
 
       });
     };
+    document.querySelector('#clearFilters').addEventListener('click', () => {
+      const switches = document.querySelectorAll('input[name="list"]');
+      switches.forEach((checkbox) => {
+        checkbox.checked = false;
+      });
+    });
 </script>
 
 
