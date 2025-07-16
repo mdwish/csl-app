@@ -113,6 +113,27 @@ function sortResults(results) {
   return results;
 }
 
+function updateFilterCounts(sources) {
+  const counts = {};
+  if (Array.isArray(sources)) {
+    sources.forEach((src) => {
+      const match = src.value.match(/\(([^()]+)\)/);
+      if (match && match[1]) {
+        counts[match[1]] = src.count;
+      }
+    });
+  }
+  document.querySelectorAll('input[name="list"]').forEach((checkbox) => {
+    const label = document.querySelector(`label[for="${checkbox.id}"]`);
+    if (!label) return;
+    if (!label.dataset.baseText) {
+      label.dataset.baseText = label.textContent;
+    }
+    const count = counts[checkbox.value] || 0;
+    label.textContent = `${label.dataset.baseText} (${count})`;
+  });
+}
+
 function fetchResults(name, offset) {
   const selectedLists = Array.from(document.querySelectorAll('input[name="list"]:checked'))
     .map(checkbox => checkbox.value)
@@ -135,10 +156,11 @@ function fetchResults(name, offset) {
         throw new Error(response.statusText);
       }
       return response.json();
-    })
+  })
     .then((data) => {
       total = data.total;
       document.querySelector('#total-results').textContent = `${total} Results`;
+      updateFilterCounts(data.sources);
       const resultsDiv = document.querySelector('#results');
       resultsDiv.innerHTML = '';
       if (data.total === 0) {
@@ -233,5 +255,6 @@ function fetchResults(name, offset) {
       document.querySelector('#results').innerHTML = '';
       prevBtn.style.display = 'none';
       nextBtn.style.display = 'none';
+      updateFilterCounts([]);
     });
 }
