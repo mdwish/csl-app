@@ -84,6 +84,21 @@ document.querySelector('#clearFilters').addEventListener('click', () => {
   switches.forEach((checkbox) => {
     checkbox.checked = false;
   });
+  const name = document.querySelector('#name').value;
+  if (name) {
+    offset = 0;
+    fetchResults(name, offset);
+  }
+});
+
+document.querySelectorAll('input[name="list"]').forEach((checkbox) => {
+  checkbox.addEventListener('change', () => {
+    const name = document.querySelector('#name').value;
+    if (name) {
+      offset = 0;
+      fetchResults(name, offset);
+    }
+  });
 });
 
 function sortResults(results) {
