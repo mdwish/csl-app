@@ -83,14 +83,29 @@ document.addEventListener('DOMContentLoaded', () => {
   const clearBtn = document.querySelector('#clearFilters');
   clearBtn.addEventListener('click', () => {
     const switches = document.querySelectorAll('input[name="list"]');
+    const anyUnchecked = Array.from(switches).some((cb) => !cb.checked);
     switches.forEach((checkbox) => {
-      checkbox.checked = false;
+      checkbox.checked = anyUnchecked;
     });
     const name = document.querySelector('#name').value;
     if (name) {
       offset = 0;
       fetchResults(name, offset);
     }
+  });
+
+  document.querySelectorAll('.only-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('input[name="list"]').forEach((cb) => {
+        cb.checked = cb.value === filter;
+      });
+      const name = document.querySelector('#name').value;
+      if (name) {
+        offset = 0;
+        fetchResults(name, offset);
+      }
+    });
   });
 
   document.querySelectorAll('input[name="list"]').forEach((checkbox) => {
