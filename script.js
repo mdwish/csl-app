@@ -191,35 +191,57 @@ function updateFilterCounts(sources) {
   });
 }
 
+function updateTypeCounts(results) {
+  const counts = {};
+  results.forEach((r) => {
+    const type = r.type === null ? 'Unknown' : r.type;
+    counts[type] = (counts[type] || 0) + 1;
+  });
+  document.querySelectorAll('input[name="type"]').forEach((checkbox) => {
+    const label = document.querySelector(`label[for="${checkbox.id}"]`);
+    if (!label) return;
+    if (!label.dataset.baseText) {
+      label.dataset.baseText = label.textContent;
+    }
+    const count = counts[checkbox.value] || 0;
+    label.textContent = `${label.dataset.baseText} (${count})`;
+  });
+}
+
   function fetchResults(name, offset) {
     const selectedLists = Array.from(document.querySelectorAll('input[name="list"]:checked'))
-      .map(checkbox => checkbox.value)
+      .map((checkbox) => checkbox.value)
       .join(',');
     const selectedTypes = Array.from(document.querySelectorAll('input[name="type"]:checked'))
-      .map(checkbox => checkbox.value);
+      .map((checkbox) => checkbox.value);
 
-  const url = `https://data.trade.gov/consolidated_screening_list/v1/search?name=${name}&fuzzy_name=true&offset=${offset}&size=${pageSize}&sources=${selectedLists}`;
+    const url = `https://data.trade.gov/consolidated_screening_list/v1/search?name=${name}&fuzzy_name=true&offset=${offset}&size=${pageSize}&sources=${selectedLists}`;
+    const countUrl = `https://data.trade.gov/consolidated_screening_list/v1/search?name=${name}&fuzzy_name=true&size=0`;
 
-  spinner.style.display = 'block';
-  errorDiv.textContent = '';
+    spinner.style.display = 'block';
+    errorDiv.textContent = '';
 
-  fetch(url, {
-    method: 'GET',
-    headers: {
-      'Cache-Control': 'no-cache',
-      'subscription-key': 'b9730532d6ba42fabc7e93f2b1c1df60',
-    },
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
-      return response.json();
-  })
-    .then((data) => {
+    Promise.all([
+      fetch(countUrl, {
+        method: 'GET',
+        headers: {
+          'Cache-Control': 'no-cache',
+          'subscription-key': 'b9730532d6ba42fabc7e93f2b1c1df60',
+        },
+      }).then((r) => (r.ok ? r.json() : Promise.reject())),
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          'Cache-Control': 'no-cache',
+          'subscription-key': 'b9730532d6ba42fabc7e93f2b1c1df60',
+        },
+      }).then((r) => (r.ok ? r.json() : Promise.reject())),
+    ])
+    .then(([countData, data]) => {
+      updateFilterCounts(countData.sources);
+      updateTypeCounts(data.results);
       total = data.total;
       document.querySelector('#total-results').textContent = `${total} Results`;
-      updateFilterCounts(data.sources);
       const resultsDiv = document.querySelector('#results');
       resultsDiv.innerHTML = '';
       if (data.total === 0) {
