@@ -9,6 +9,36 @@ const prevBtn = document.querySelector('#prev-btn');
 const nextBtn = document.querySelector('#next-btn');
 const historyList = document.querySelector('#search-history');
 
+const sourceColors = {
+  DPL: 'danger',
+  EL: 'warning',
+  MEU: 'primary',
+  UVL: 'secondary',
+  ISN: 'info',
+  DTC: 'dark',
+  CAP: 'success',
+  CMIC: 'light',
+  FSE: 'primary',
+  MBS: 'secondary',
+  PLC: 'info',
+  SSI: 'success',
+  SDN: 'danger',
+};
+
+function sanitize(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function getSourceAcronym(source) {
+  const match = source.match(/\(([^)]+)\)/);
+  return match ? match[1] : source;
+}
+
 document.querySelector('#page-size').addEventListener('change', (e) => {
   pageSize = parseInt(e.target.value, 10);
   offset = 0;
@@ -230,7 +260,9 @@ function updateFilterCounts(sources) {
         accordionButton.setAttribute('data-bs-target', `#collapse${index}`);
         accordionButton.setAttribute('aria-expanded', 'false');
         accordionButton.setAttribute('aria-controls', `collapse${index}`);
-        accordionButton.innerHTML = `${result.type === null ? '&#10067;' : ''} ${result.type === 'Individual' ? '&#128100;' : ''} ${result.type === 'Entity' ? '&#127970;' : ''} ${result.type === 'Aircraft' ? '&#9992;' : ''} ${result.type === 'Vessel' ? '&#128674;' : ''} ${result.name}`;
+        const acronym = getSourceAcronym(result.source);
+        const color = sourceColors[acronym] || 'secondary';
+        accordionButton.innerHTML = `${result.type === null ? '&#10067;' : ''} ${result.type === 'Individual' ? '&#128100;' : ''} ${result.type === 'Entity' ? '&#127970;' : ''} ${result.type === 'Aircraft' ? '&#9992;' : ''} ${result.type === 'Vessel' ? '&#128674;' : ''} ${sanitize(result.name)} <span class="badge rounded-pill bg-${color} ms-2">${sanitize(acronym)}</span>`;
 
         accordionHeading.appendChild(accordionButton);
 
