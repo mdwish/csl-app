@@ -8,7 +8,6 @@ const errorDiv = document.querySelector('#error-message');
 const prevBtn = document.querySelector('#prev-btn');
 const nextBtn = document.querySelector('#next-btn');
 const historyList = document.querySelector('#search-history');
-const clearHistoryBtn = document.querySelector('#clear-history');
 
 document.querySelector('#page-size').addEventListener('change', (e) => {
   pageSize = parseInt(e.target.value, 10);
@@ -61,25 +60,10 @@ function updateHistory(term) {
   renderHistory();
 }
 
-function removeFromHistory(term) {
-  let history = JSON.parse(localStorage.getItem('searchHistory') || '[]');
-  history = history.filter((t) => t !== term);
-  localStorage.setItem('searchHistory', JSON.stringify(history));
-  renderHistory();
-}
-
-function clearHistory() {
-  localStorage.removeItem('searchHistory');
-  renderHistory();
-}
-
 function renderHistory() {
   const history = JSON.parse(localStorage.getItem('searchHistory') || '[]');
   historyList.innerHTML = '';
   history.forEach((term) => {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'history-entry';
-
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'btn btn-link p-0 history-item';
@@ -89,31 +73,12 @@ function renderHistory() {
       offset = 0;
       fetchResults(term, offset);
     });
-
-    const removeBtn = document.createElement('button');
-    removeBtn.type = 'button';
-    removeBtn.className = 'btn-close btn-sm ms-1';
-    removeBtn.setAttribute('aria-label', 'Remove');
-    removeBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      removeFromHistory(term);
-    });
-
-    wrapper.appendChild(btn);
-    wrapper.appendChild(removeBtn);
-    historyList.appendChild(wrapper);
+    historyList.appendChild(btn);
   });
-  if (clearHistoryBtn) {
-    clearHistoryBtn.style.display = history.length ? 'inline-block' : 'none';
-  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   renderHistory();
-
-  if (clearHistoryBtn) {
-    clearHistoryBtn.addEventListener('click', clearHistory);
-  }
 
   const clearBtn = document.querySelector('#clearFilters');
   clearBtn.addEventListener('click', () => {

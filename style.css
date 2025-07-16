@@ -13,14 +13,3 @@ body {
 .history-item {
   text-decoration: none;
 }
-
-.history-entry {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.history-entry .btn-close {
-  width: 0.5rem;
-  height: 0.5rem;
-}
