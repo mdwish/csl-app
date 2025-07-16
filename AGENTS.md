@@ -4,18 +4,6 @@ A lightweight, static web app for querying and displaying the U.S. Consolidate
 
 ---
 
-## Quick Start
-
-| Action | Command |
-| --- | --- |
-| Local preview | `npx serve .` |
-| Deploy to GitHub Pages | Push to `main`, enable Pages on `/ (root)` |
-| Validate HTML | `npx html-validate index.html` |
-
-_No build or dependency install is required._
-
----
-
 ## Coding Guidelines
 
 1. **UI & Design**  
@@ -48,15 +36,6 @@ _No build or dependency install is required._
 
 ---
 
-## Optional Testing
-
-If you add pure functions, place Jest tests in `__tests__/filename.test.js`. No E2E tests are expected at this time.
-
----
-
 ## PR Checklist
 
-- [ ] Manual test: search, pagination, sort, filter, history.
-- [ ] ESLint passes (`npx eslint .` once config is added).
-- [ ] Lighthouse performance & accessibility ≥ 90.
 - [ ] Update `README.md` and this file if you change conventions.
