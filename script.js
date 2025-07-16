@@ -80,8 +80,8 @@ function renderHistory() {
 document.addEventListener('DOMContentLoaded', () => {
   renderHistory();
 
-  const clearBtn = document.querySelector('#clearFilters');
-  clearBtn.addEventListener('click', () => {
+  const toggleBtn = document.querySelector('#toggleFilters');
+  toggleBtn.addEventListener('click', () => {
     const listSwitches = document.querySelectorAll('input[name="list"]');
     const typeSwitches = document.querySelectorAll('input[name="type"]');
     const allSwitches = [...listSwitches, ...typeSwitches];
