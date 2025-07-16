@@ -208,9 +208,6 @@ function updateFilterCounts(sources) {
   spinner.style.display = 'block';
   errorDiv.textContent = '';
 
-  const resultsDiv = document.querySelector('#results');
-  resultsDiv.innerHTML = '';
-
   fetch(url, {
     method: 'GET',
     headers: {
@@ -218,17 +215,17 @@ function updateFilterCounts(sources) {
       'subscription-key': 'b9730532d6ba42fabc7e93f2b1c1df60',
     },
   })
-    .then(async (response) => {
+    .then((response) => {
       if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`HTTP ${response.status} ${response.statusText}: ${text}`);
+        throw new Error(response.statusText);
       }
       return response.json();
-    })
+  })
     .then((data) => {
       total = data.total;
       document.querySelector('#total-results').textContent = `${total} Results`;
       updateFilterCounts(data.sources);
+      const resultsDiv = document.querySelector('#results');
       resultsDiv.innerHTML = '';
       if (data.total === 0) {
         resultsDiv.innerHTML = '<p>No results found</p>';
@@ -323,15 +320,10 @@ function updateFilterCounts(sources) {
       spinner.style.display = 'none';
       updateHistory(name);
     })
-    .catch((error) => {
+    .catch(() => {
       spinner.style.display = 'none';
       errorDiv.textContent = 'Failed to load results.';
-      const alert = document.createElement('div');
-      alert.className = 'alert alert-danger';
-      alert.setAttribute('role', 'alert');
-      alert.textContent = error.message;
-      resultsDiv.innerHTML = '';
-      resultsDiv.appendChild(alert);
+      document.querySelector('#results').innerHTML = '';
       prevBtn.style.display = 'none';
       nextBtn.style.display = 'none';
       updateFilterCounts([]);

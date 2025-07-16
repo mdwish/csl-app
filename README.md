@@ -18,8 +18,6 @@ Use the "Prev" and "Next" buttons to navigate through the results. The page size
 
 The app uses the Fetch API to send a GET request to the Consolidated Screening List API with the specified search query and offset. The API returns a JSON object containing the search results, which are then displayed in a table using JavaScript.
 
-If a request fails, an error banner is shown and the full API error message is also displayed in the results area to help with debugging.
-
 The "Prev" and "Next" buttons are implemented using event listeners that update the offset and resubmit the search query when clicked.
 
 ## Future improvements
