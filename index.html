@@ -86,8 +86,8 @@
       <div class="collapse mt-3" id="filterOptions">
         <div class="card card-body">
           <!-- Row for responsive columns -->
-          <div class="row">
-            <div class="col-12 col-md-6 col-lg-4">
+            <div class="row">
+              <div class="col-12 col-md-6 col-lg-4">
               <div class="form-check d-flex align-items-center">
                 <input class="form-check-input" type="checkbox" id="dpl" name="list" value="DPL" checked>
                 <label class="form-check-label ms-1" for="dpl">Denied Persons List (DPL)</label>
@@ -177,20 +177,50 @@
                 <label class="form-check-label ms-1" for="sdn">Specially Designated Nationals (SDN)</label>
                 <button type="button" class="btn btn-link p-0 ms-1 only-btn" data-filter="SDN">Only</button>
               </div>
+              </div>
+
+              <!-- Small Toggle Filters Button -->
+              <hr class="mt-3 mb-3"/>
+              <div class="col-12 col-md-6 col-lg-4">
+                <button class="btn-close" aria-label="Close" type="button" data-bs-toggle="collapse" data-bs-target="#filterOptions" aria-expanded="false" aria-controls="filterOptions"></button>
+                <!-- Toggle Filters Button -->
+                <button class="btn btn-light btn-sm" type="button" id="clearFilters">
+                  Toggle Filters
+                </button>
+              </div>
             </div>
-            <!-- Small Toggle Filters Button -->
+
             <hr class="mt-3 mb-3"/>
-            <div class="col-12 col-md-6 col-lg-4">
-              <button class="btn-close" aria-label="Close" type="button" data-bs-toggle="collapse" data-bs-target="#filterOptions" aria-expanded="false" aria-controls="filterOptions"></button>
-              <!-- Toggle Filters Button -->
-              <button class="btn btn-light btn-sm" type="button" id="clearFilters">
-                Toggle Filters
-              </button>
-          </div>
+            <div class="row">
+              <div class="col-12 col-md-6 col-lg-3">
+                <div class="form-check d-flex align-items-center">
+                  <input class="form-check-input" type="checkbox" id="type-entity" name="type" value="Entity" checked>
+                  <label class="form-check-label ms-1" for="type-entity">Entity</label>
+                </div>
+              </div>
+              <div class="col-12 col-md-6 col-lg-3">
+                <div class="form-check d-flex align-items-center">
+                  <input class="form-check-input" type="checkbox" id="type-vessel" name="type" value="Vessel" checked>
+                  <label class="form-check-label ms-1" for="type-vessel">Vessel</label>
+                </div>
+              </div>
+              <div class="col-12 col-md-6 col-lg-3">
+                <div class="form-check d-flex align-items-center">
+                  <input class="form-check-input" type="checkbox" id="type-individual" name="type" value="Individual" checked>
+                  <label class="form-check-label ms-1" for="type-individual">Individual</label>
+                </div>
+              </div>
+              <div class="col-12 col-md-6 col-lg-3">
+                <div class="form-check d-flex align-items-center">
+                  <input class="form-check-input" type="checkbox" id="type-unknown" name="type" value="Unknown" checked>
+                  <label class="form-check-label ms-1" for="type-unknown">Unknown</label>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
-      </div>      
-    </form>
+      </form>
     
     
     <p id="total-results" aria-live="polite"></p>

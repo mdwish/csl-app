@@ -82,9 +82,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const clearBtn = document.querySelector('#clearFilters');
   clearBtn.addEventListener('click', () => {
-    const switches = document.querySelectorAll('input[name="list"]');
-    const anyUnchecked = Array.from(switches).some((cb) => !cb.checked);
-    switches.forEach((checkbox) => {
+    const listSwitches = document.querySelectorAll('input[name="list"]');
+    const typeSwitches = document.querySelectorAll('input[name="type"]');
+    const allSwitches = [...listSwitches, ...typeSwitches];
+    const anyUnchecked = Array.from(allSwitches).some((cb) => !cb.checked);
+    allSwitches.forEach((checkbox) => {
       checkbox.checked = anyUnchecked;
     });
     const name = document.querySelector('#name').value;
@@ -109,6 +111,16 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.querySelectorAll('input[name="list"]').forEach((checkbox) => {
+    checkbox.addEventListener('change', () => {
+      const name = document.querySelector('#name').value;
+      if (name) {
+        offset = 0;
+        fetchResults(name, offset);
+      }
+    });
+  });
+
+  document.querySelectorAll('input[name="type"]').forEach((checkbox) => {
     checkbox.addEventListener('change', () => {
       const name = document.querySelector('#name').value;
       if (name) {
@@ -149,10 +161,12 @@ function updateFilterCounts(sources) {
   });
 }
 
-function fetchResults(name, offset) {
-  const selectedLists = Array.from(document.querySelectorAll('input[name="list"]:checked'))
-    .map(checkbox => checkbox.value)
-    .join(',');
+  function fetchResults(name, offset) {
+    const selectedLists = Array.from(document.querySelectorAll('input[name="list"]:checked'))
+      .map(checkbox => checkbox.value)
+      .join(',');
+    const selectedTypes = Array.from(document.querySelectorAll('input[name="type"]:checked'))
+      .map(checkbox => checkbox.value);
 
   const url = `https://data.trade.gov/consolidated_screening_list/v1/search?name=${name}&fuzzy_name=true&offset=${offset}&size=${pageSize}&sources=${selectedLists}`;
 
@@ -190,11 +204,18 @@ function fetchResults(name, offset) {
       prevBtn.style.display = offset > 0 ? 'inline-block' : 'none';
       nextBtn.style.display = offset + pageSize < total ? 'inline-block' : 'none';
 
-      const accordion = document.createElement('div');
-      accordion.classList.add('accordion');
-      accordion.setAttribute('id', 'accordionExample');
+        const accordion = document.createElement('div');
+        accordion.classList.add('accordion');
+        accordion.setAttribute('id', 'accordionExample');
 
-      sortResults(data.results).forEach((result, index) => {
+        const filteredResults = sortResults(
+          data.results.filter((r) => {
+            const rType = r.type === null ? 'Unknown' : r.type;
+            return selectedTypes.includes(rType);
+          })
+        );
+
+        filteredResults.forEach((result, index) => {
         const accordionItem = document.createElement('div');
         accordionItem.classList.add('accordion-item');
 
