@@ -1,0 +1,31 @@
+body {
+  background-color: #fff;
+  color: #212529;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #121212;
+    color: #f8f9fa;
+  }
+  .navbar-light.bg-light {
+    background-color: #343a40 !important;
+  }
+  .navbar-light .navbar-brand,
+  .navbar-light .navbar-nav .nav-link {
+    color: #f8f9fa !important;
+  }
+  .card {
+    background-color: #1f1f1f;
+    color: #f8f9fa;
+  }
+  .btn-light {
+    background-color: #444 !important;
+    color: #fff !important;
+  }
+}
+
+/* Ensure responsive tables/accordion 100% width */
+.accordion {
+  width: 100%;
+}
