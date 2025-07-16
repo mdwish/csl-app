@@ -140,6 +140,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  document.querySelectorAll('.only-btn-type').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const type = btn.dataset.type;
+      document.querySelectorAll('input[name="type"]').forEach((cb) => {
+        cb.checked = cb.value === type;
+      });
+      const name = document.querySelector('#name').value;
+      if (name) {
+        offset = 0;
+        fetchResults(name, offset);
+      }
+    });
+  });
+
   document.querySelectorAll('input[name="list"]').forEach((checkbox) => {
     checkbox.addEventListener('change', () => {
       const name = document.querySelector('#name').value;
