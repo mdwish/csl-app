@@ -9,3 +9,7 @@ body {
 .accordion {
   width: 100%;
 }
+
+.history-item {
+  text-decoration: none;
+}
