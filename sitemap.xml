@@ -1,17 +1,20 @@
+---
+---
+
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-<url>
-<loc>https://deniedpartyscreening.us/</loc>
-<lastmod>2023-02-14T14:43:52+00:00</lastmod>
-<priority>1.00</priority>
-</url>
-<url>
-<loc>https://deniedpartyscreening.us/about.html</loc>
-<lastmod>2023-02-14T14:43:52+00:00</lastmod>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://deniedpartyscreening.us/faq.html</loc>
-<lastmod>2023-02-14T14:43:52+00:00</lastmod>
-<priority>0.80</priority>
-</url>
+  <url>
+    <loc>https://{{ site.github.owner_name }}.github.io/{{ site.github.repository_name }}/</loc>
+    <lastmod>{{ "now" | date_to_xmlschema }}</lastmod>
+    <priority>1.00</priority>
+  </url>
+  <url>
+    <loc>https://{{ site.github.owner_name }}.github.io/{{ site.github.repository_name }}/about.html</loc>
+    <lastmod>{{ "now" | date_to_xmlschema }}</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://{{ site.github.owner_name }}.github.io/{{ site.github.repository_name }}/faq.html</loc>
+    <lastmod>{{ "now" | date_to_xmlschema }}</lastmod>
+    <priority>0.80</priority>
+  </url>
 </urlset>
