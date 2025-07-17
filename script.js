@@ -5,6 +5,8 @@ let sortOrder = 'relevance';
 
 const spinner = document.querySelector('#loading-spinner');
 const errorDiv = document.querySelector('#error-message');
+const pageNumbers = document.querySelector("#page-numbers");
+const totalResultsEl = document.querySelector("#total-results");
 const prevBtn = document.querySelector('#prev-btn');
 const nextBtn = document.querySelector('#next-btn');
 const historyList = document.querySelector('#search-history');
@@ -229,8 +231,33 @@ function updateTypeCounts(results) {
     } else {
       label.classList.remove('fw-bold');
     }
+
   });
 }
+function renderPagination() {
+  pageNumbers.innerHTML = "";
+  const totalPages = Math.ceil(total / pageSize);
+  const currentPage = Math.floor(offset / pageSize) + 1;
+  let start = Math.max(1, currentPage - 2);
+  let end = Math.min(totalPages, start + 4);
+  if (end - start < 4) {
+    start = Math.max(1, end - 4);
+  }
+  for (let i = start; i <= end; i++) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "btn btn-secondary";
+    if (i === currentPage) btn.classList.add("active");
+    btn.textContent = i;
+    btn.addEventListener("click", () => {
+      offset = (i - 1) * pageSize;
+      const name = document.querySelector("#name").value;
+      fetchResults(name, offset);
+    });
+    pageNumbers.appendChild(btn);
+  }
+}
+
 
   function fetchResults(name, offset) {
     const selectedLists = Array.from(document.querySelectorAll('input[name="list"]:checked'))
@@ -265,7 +292,7 @@ function updateTypeCounts(results) {
       updateFilterCounts(countData.sources);
       updateTypeCounts(data.results);
       total = data.total;
-      document.querySelector('#total-results').textContent = `${total} Results`;
+      totalResultsEl.textContent = `${total} Results`;
       const resultsDiv = document.querySelector('#results');
       resultsDiv.innerHTML = '';
       if (data.total === 0) {
@@ -274,12 +301,14 @@ function updateTypeCounts(results) {
         nextBtn.style.display = 'none';
         spinner.style.display = 'none';
         updateHistory(name);
+        pageNumbers.innerHTML = "";
         return;
       }
 
       prevBtn.style.display = offset > 0 ? 'inline-block' : 'none';
       nextBtn.style.display = offset + pageSize < total ? 'inline-block' : 'none';
 
+      renderPagination();
         const accordion = document.createElement('div');
         accordion.classList.add('accordion');
         accordion.setAttribute('id', 'accordionExample');
@@ -368,6 +397,8 @@ function updateTypeCounts(results) {
       errorDiv.textContent = 'Failed to load results.';
       document.querySelector('#results').innerHTML = '';
       prevBtn.style.display = 'none';
+      totalResultsEl.textContent = "";
+      pageNumbers.innerHTML = "";
       nextBtn.style.display = 'none';
       updateFilterCounts([]);
     });
