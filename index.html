@@ -57,23 +57,8 @@
         <input type="text" class="form-control" id="name" name="name" placeholder="Search by name" aria-label="Search by name">
         <button type="submit" class="btn btn-success">Search</button>
       </div>
-      <div class="mb-2">
-        <label for="page-size" class="form-label">Results per page</label>
-        <select id="page-size" class="form-select w-auto d-inline-block" aria-label="Results per page">
-          <option value="10">10</option>
-          <option value="25">25</option>
-          <option value="50">50</option>
-        </select>
-        <label for="sort" class="form-label ms-2">Sort</label>
-        <select id="sort" class="form-select w-auto d-inline-block" aria-label="Sort results">
-          <option value="relevance">Relevance</option>
-          <option value="nameAsc">Name A-Z</option>
-          <option value="nameDesc">Name Z-A</option>
-        </select>
-      </div>
-
-      <div class="mb-2" id="history-container">
-        <label class="form-label">Recent Searches</label>
+      <div class="text-secondary small d-flex align-items-center mb-2" id="history-container">
+        <span class="me-2">Recent Searches</span>
         <div id="search-history" class="d-flex flex-wrap gap-2"></div>
       </div>
   
@@ -226,7 +211,21 @@
       </form>
     
     
-    <p id="total-results" aria-live="polite"></p>
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+      <p id="total-results" class="mb-0" aria-live="polite"></p>
+      <label for="page-size" class="form-label mb-0">Results per page</label>
+      <select id="page-size" class="form-select form-select-sm w-auto" aria-label="Results per page">
+        <option value="10">10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+      </select>
+      <label for="sort" class="form-label mb-0 ms-2">Sort</label>
+      <select id="sort" class="form-select form-select-sm w-auto" aria-label="Sort results">
+        <option value="relevance">Relevance</option>
+        <option value="nameAsc">Name A-Z</option>
+        <option value="nameDesc">Name Z-A</option>
+      </select>
+    </div>
     <div id="results" aria-live="polite"></div>
     <div id="loading-spinner" class="text-center my-3" style="display:none;">
       <div class="spinner-border" role="status">
