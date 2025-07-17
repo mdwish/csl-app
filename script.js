@@ -337,7 +337,7 @@ function renderPagination() {
         accordionButton.setAttribute('aria-controls', `collapse${index}`);
         const acronym = getSourceAcronym(result.source);
         const color = sourceColors[acronym] || 'secondary';
-        accordionButton.innerHTML = `${result.type === null ? '&#10067;' : ''} ${result.type === 'Individual' ? '&#128100;' : ''} ${result.type === 'Entity' ? '&#127970;' : ''} ${result.type === 'Aircraft' ? '&#9992;' : ''} ${result.type === 'Vessel' ? '&#128674;' : ''} ${sanitize(result.name)} <span class="badge rounded-pill bg-${color} ms-2">${sanitize(acronym)}</span>`;
+        accordionButton.innerHTML = `${result.type === null ? '&#10067;' : ''} ${result.type === 'Individual' ? '&#128100;' : ''} ${result.type === 'Entity' ? '&#127970;' : ''} ${result.type === 'Aircraft' ? '&#9992;' : ''} ${result.type === 'Vessel' ? '&#128674;' : ''} ${sanitize(result.name)} <span class="badge rounded-pill text-bg-${color} ms-2">${sanitize(acronym)}</span>`;
 
         accordionHeading.appendChild(accordionButton);
 
