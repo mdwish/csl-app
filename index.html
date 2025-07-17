@@ -212,7 +212,6 @@
     
     
     <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-      <p id="total-results" class="mb-0" aria-live="polite"></p>
       <label for="page-size" class="form-label mb-0">Results per page</label>
       <select id="page-size" class="form-select form-select-sm w-auto" aria-label="Results per page">
         <option value="10">10</option>
@@ -233,8 +232,14 @@
       </div>
     </div>
     <p id="error-message" class="text-danger" role="alert"></p>
-    <button id="prev-btn" class="btn btn-secondary" style="display: none;" aria-label="Previous page">Prev</button>
-    <button id="next-btn" class="btn btn-secondary" style="display: none;" aria-label="Next page">Next</button>
+      <div id="pagination-container" class="d-flex flex-column flex-sm-row align-items-center gap-2 my-3">
+        <div id="pagination-buttons" class="btn-group" role="group">
+          <button id="prev-btn" class="btn btn-secondary" style="display: none;" aria-label="Previous page">Prev</button>
+          <div id="page-numbers" class="btn-group"></div>
+          <button id="next-btn" class="btn btn-secondary" style="display: none;" aria-label="Next page">Next</button>
+        </div>
+        <p id="total-results" class="mb-0" aria-live="polite"></p>
+      </div>
   </div>
   
   <script src="script.js"></script>
