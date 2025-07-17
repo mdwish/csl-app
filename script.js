@@ -202,6 +202,11 @@ function updateFilterCounts(sources) {
     }
     const count = counts[checkbox.value] || 0;
     label.textContent = `${label.dataset.baseText} (${count})`;
+    if (count > 0) {
+      label.classList.add('fw-bold');
+    } else {
+      label.classList.remove('fw-bold');
+    }
   });
 }
 
@@ -219,6 +224,11 @@ function updateTypeCounts(results) {
     }
     const count = counts[checkbox.value] || 0;
     label.textContent = `${label.dataset.baseText} (${count})`;
+    if (count > 0) {
+      label.classList.add('fw-bold');
+    } else {
+      label.classList.remove('fw-bold');
+    }
   });
 }
 
