@@ -192,7 +192,9 @@ function updateFilterCounts(sources) {
     sources.forEach((src) => {
       const match = src.value.match(/\(([^()]+)\)/);
       if (match && match[1]) {
-        counts[match[1]] = src.count;
+        let acronym = match[1];
+        if (acronym === 'NS-MBS List') acronym = 'MBS';
+        counts[acronym] = src.count;
       }
     });
   }
