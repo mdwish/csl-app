@@ -186,18 +186,12 @@ function sortResults(results) {
   return results;
 }
 
-function updateFilterCounts(sources) {
+function updateListCounts(results) {
   const counts = {};
-  if (Array.isArray(sources)) {
-    sources.forEach((src) => {
-      const match = src.value.match(/\(([^()]+)\)/);
-      if (match && match[1]) {
-        let acronym = match[1];
-        if (acronym === 'NS-MBS List') acronym = 'MBS';
-        counts[acronym] = src.count;
-      }
-    });
-  }
+  results.forEach((r) => {
+    const acronym = getSourceAcronym(r.source);
+    counts[acronym] = (counts[acronym] || 0) + 1;
+  });
   document.querySelectorAll('input[name="list"]').forEach((checkbox) => {
     const label = document.querySelector(`label[for="${checkbox.id}"]`);
     if (!label) return;
@@ -269,29 +263,19 @@ function renderPagination() {
       .map((checkbox) => checkbox.value);
 
     const url = `https://data.trade.gov/consolidated_screening_list/v1/search?name=${name}&fuzzy_name=true&offset=${offset}&size=${pageSize}&sources=${selectedLists}`;
-    const countUrl = `https://data.trade.gov/consolidated_screening_list/v1/search?name=${name}&fuzzy_name=true&size=0`;
 
     spinner.style.display = 'block';
     errorDiv.textContent = '';
 
-    Promise.all([
-      fetch(countUrl, {
-        method: 'GET',
-        headers: {
-          'Cache-Control': 'no-cache',
-          'subscription-key': 'b9730532d6ba42fabc7e93f2b1c1df60',
-        },
-      }).then((r) => (r.ok ? r.json() : Promise.reject())),
-      fetch(url, {
-        method: 'GET',
-        headers: {
-          'Cache-Control': 'no-cache',
-          'subscription-key': 'b9730532d6ba42fabc7e93f2b1c1df60',
-        },
-      }).then((r) => (r.ok ? r.json() : Promise.reject())),
-    ])
-    .then(([countData, data]) => {
-      updateFilterCounts(countData.sources);
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        'Cache-Control': 'no-cache',
+        'subscription-key': 'b9730532d6ba42fabc7e93f2b1c1df60',
+      },
+    })
+    .then((r) => (r.ok ? r.json() : Promise.reject()))
+    .then((data) => {
       updateTypeCounts(data.results);
       total = data.total;
       totalResultsEl.textContent = `${total} Results`;
@@ -304,6 +288,7 @@ function renderPagination() {
         spinner.style.display = 'none';
         updateHistory(name);
         pageNumbers.innerHTML = "";
+        updateListCounts([]);
         return;
       }
 
@@ -321,6 +306,7 @@ function renderPagination() {
             return selectedTypes.includes(rType);
           })
         );
+        updateListCounts(filteredResults);
 
         filteredResults.forEach((result, index) => {
         const accordionItem = document.createElement('div');
@@ -402,6 +388,6 @@ function renderPagination() {
       totalResultsEl.textContent = "";
       pageNumbers.innerHTML = "";
       nextBtn.style.display = 'none';
-      updateFilterCounts([]);
+      updateListCounts([]);
     });
 }
